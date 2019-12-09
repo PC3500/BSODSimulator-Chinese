@@ -1,0 +1,81 @@
+﻿<Window x:Class="BluescreenSimulator.Views.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BluescreenSimulator.Properties"
+        mc:Ignorable="d"
+        Icon="/frown.ico"
+        Style="{StaticResource {x:Type Window}}"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Title="使用說明" Height="523" Width="680">
+
+    <Window.Resources>
+        <Style TargetType="Hyperlink">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="TextDecorations" Value="Underline" />
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="TextDecorations" Value="" />
+        </Style>
+    </Window.Resources>
+
+    <StackPanel>
+        <TextBlock Padding="10" FontWeight="Bold" Text="{x:Static local:AppInfo.AppTitle}" />
+        <TextBlock Padding="10" TextWrapping="WrapWithOverflow">
+            該程序模擬BSOD，不會對您的PC造成任何危險或傷害。
+        </TextBlock>
+        <TextBlock Padding="10,0,0,0" FontWeight="Bold">
+            Instructions:
+        </TextBlock>
+        <TextBlock Padding="15,0,0,0" TextWrapping="Wrap">
+            • 您可以修改"第一行/第二行字"來更改BSOD上的文本。 <LineBreak />
+            • 在"背景色"字段中，可以設置背景/前景（文本）顏色（RGB格式）。 <LineBreak />
+            • 使用"開始延遲"，可以將BSOD設置為在指定的秒數後觸發。 <LineBreak />
+            • QR碼默認是透明的。 您可以選擇隱藏它（Windows 8 / 8.1樣式）或使用原始顏色。<LineBreak />
+            • 單擊"來吧"以觸發BSOD。 <LineBreak />
+            • 要退出BSOD屏幕，請按Alt + F4或F7。 <LineBreak />
+            • 如果指定了延遲，則可以通過單擊"取消BSOD"取消它。 <LineBreak />
+            • 將字段保留為空會將其設置為默認值，這些默認值設置為Windows 9x/7/10的預設BSOD。 <LineBreak />
+            • 延遲默認為0，命令默認為"無命令"。 <LineBreak />
+            • 進度條計數器自動開始跑。 <LineBreak />
+            • 在命令行(cmd)界面.運行 <TextBlock FontFamily="Consolas">BluescreenSimulator --help</TextBlock> 取得更多信息。
+        </TextBlock>
+        <TextBlock Padding="10,10,0,0" FontWeight="Bold">
+            什麼是Unsafe Mode?該如何啟用?
+        </TextBlock>
+        <TextBlock Padding="10,0,0,0" TextWrapping="Wrap">
+            在Unsafe Mode下，您可以指定將在BSOD"完成"(100%)之後運行的CMD命令（例如:重新啟動命令).因為這可能很危險，所以必須通過從命令運行程序來顯式啟用它
+            與參數“ --enable-unsafe”一致，如下所示：<TextBlock Margin="10,0,0,0" FontFamily="Consolas">BluescreenSimulator --enable-unsafe</TextBlock>
+        </TextBlock>
+        <TextBlock Padding="10,10,10,0">
+            Bluescreen Simulator是開源的!
+        </TextBlock>
+        <TextBlock Padding="10,0,0,0">
+            <Hyperlink NavigateUri="https://github.com/FlyTechVideos/BluescreenSimulator" Click="Hyperlink_Click">
+                查看我們的Github開源地址
+            </Hyperlink>
+        </TextBlock>
+        <TextBlock Padding="10,10,0,0">
+            如果您可以訂閱我的頻道，我將非常高興！
+        </TextBlock>
+        <TextBlock Padding="10,0,0,0">
+            <Hyperlink NavigateUri="https://www.youtube.com/FlyTechVideos" Click="Hyperlink_Click">作者:FlyTech Videos的Youtube頻道</Hyperlink>
+        </TextBlock>
+        <TextBlock Padding="10,0,0,0">
+            <Hyperlink NavigateUri="https://www.youtube.com/channel/UC0EZ_83TWS4nAJet4-zGqcg" Click="Hyperlink_Click">中文化作者:PC3500的Youtube頻道</Hyperlink>
+        </TextBlock>
+        <TextBlock Padding="10,10,0,0">
+            該軟件正在使用MIT許可的庫"NDesk.Options"
+            <Hyperlink NavigateUri="https://opensource.org/licenses/mit-license.php" Click="Hyperlink_Click">MIT License</Hyperlink> |
+            <Hyperlink NavigateUri="http://www.ndesk.org/Options" Click="Hyperlink_Click">Project page</Hyperlink>
+        </TextBlock>
+        <TextBlock Padding="10,10,0,0">
+             該軟件正在使用MIT許可的庫"QRCoder"
+            <Hyperlink NavigateUri="https://opensource.org/licenses/mit-license.php" Click="Hyperlink_Click">MIT License</Hyperlink> |
+            <Hyperlink NavigateUri="https://github.com/codebude/QRCoder" Click="Hyperlink_Click">Project page</Hyperlink>
+        </TextBlock>
+    </StackPanel>
+</Window>

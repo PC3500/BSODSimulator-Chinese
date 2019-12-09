@@ -1,0 +1,261 @@
+﻿<Window x:Class="BluescreenSimulator.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:BluescreenSimulator.Controls"
+        xmlns:converters="clr-namespace:BluescreenSimulator.Converters"
+        xmlns:viewModels="clr-namespace:BluescreenSimulator.ViewModels"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Icon="/frown.ico"
+        ResizeMode="CanResize"
+        Title="藍屏模擬器" Style="{DynamicResource {x:Type Window}}"
+        Height="475" Width="640" WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
+		SizeToContent="Height"
+		MinHeight="200" MinWidth="350">
+
+    <Window.Resources>
+        <converters:NotConverter x:Key="NotConverter"/>
+		<BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+		
+		<Style TargetType="Label" x:Key="LabelFormStyle" BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="Grid.Column" Value="0"/>
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="Margin" Value="3" />
+			<Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+        </Style>
+		<!--TODO: Remove the line below and fix the error which appears after the removal-->
+		<system:Double x:Key="MinGridHeight">100</system:Double>
+        <Style TargetType="ScrollViewer">
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+		<Style TargetType="TextBox" x:Key="TextBoxFormStyle" BasedOn="{StaticResource {x:Type TextBox}}">
+			<Setter Property="Grid.Column" Value="2"/>
+			<Setter Property="Margin" Value="3" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+		</Style>
+	</Window.Resources>
+
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto" />
+			<ColumnDefinition Width="10" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+		</Grid.RowDefinitions>
+		<Grid.Resources>
+			<Style TargetType="Label" BasedOn="{StaticResource LabelFormStyle}" />
+			<Style TargetType="TextBox" BasedOn="{StaticResource TextBoxFormStyle}" />
+		</Grid.Resources>
+
+		<TabControl Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Name="Tabs" ItemsSource="{Binding Bluescreens}" SelectedItem="{Binding SelectedBluescreen}" SelectionChanged="Tabs_SelectionChanged">
+			<TabControl.ItemTemplate>
+				<DataTemplate DataType="{x:Type viewModels:IBluescreenViewModel}">
+					<TextBlock Text="{Binding StyleName}"/>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+			<TabControl.Resources>
+				<DataTemplate DataType="{x:Type viewModels:Windows10BluescreenViewModel}">
+					<!-- ReSharper disable Xaml.MissingGridIndex -->
+					<ScrollViewer>
+						<Grid MinHeight="{StaticResource MinGridHeight}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto" />
+								<ColumnDefinition Width="10" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="auto" />
+							</Grid.RowDefinitions>
+							<Grid.Resources>
+								<Style TargetType="Label" BasedOn="{StaticResource LabelFormStyle}" />
+								<Style TargetType="TextBox" BasedOn="{StaticResource TextBoxFormStyle}" />
+							</Grid.Resources>
+
+							<Label Content="表情" />
+							<TextBox Name="Emoticon" Grid.Row="0" Text="{Binding Emoticon}" />
+
+							<Label Grid.Row="1" Content="第一行字" />
+							<TextBox Name="MainText1" Grid.Row="1" Text="{Binding MainText1}" />
+
+							<Label Grid.Row="2" Content="第二行字" />
+							<TextBox Name="MainText2" Grid.Row="2" Text="{Binding MainText2}" />
+
+							<Label Grid.Row="3" Content="進度條" />
+							<DockPanel Grid.Column="2" Grid.Row="3" LastChildFill="True" Margin="2,0,0,0">
+								<TextBlock Text="{Binding Progress, StringFormat={}{0:N0}%}"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Left" />
+								<TextBox Text="{Binding Complete}" VerticalContentAlignment="Center" />
+							</DockPanel>
+
+							<Label Grid.Row="4" Content="其他資訊(小字)" />
+							<TextBox Name="MoreInfo" Grid.Row="4" Text="{Binding MoreInfo}" TextWrapping="Wrap" />
+
+							<Label Grid.Row="5" Content="幫助人員" />
+							<TextBox Name="SupportPerson" Grid.Row="5" Text="{Binding SupportPerson}" />
+
+							<Label Grid.Row="6" Content="錯誤資訊" />
+							<TextBox Grid.Row="6" Text="{Binding StopCode}" />
+
+							<UniformGrid Grid.Row="11" Grid.ColumnSpan="3" Columns="2" Rows="1">
+								<CheckBox IsChecked="{Binding UseOriginalQR}" IsEnabled="{Binding ShowQR}" Content="使用預設QR-Code" />
+								<CheckBox IsChecked="{Binding HideQR}" Content="隱藏QR-Code" />
+							</UniformGrid>
+						</Grid>
+					</ScrollViewer>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type viewModels:Windows7BluescreenViewModel}">
+					<ScrollViewer>
+						<Grid MinHeight="{StaticResource MinGridHeight}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto"/>
+								<ColumnDefinition Width="10" />
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+							</Grid.RowDefinitions>
+							<Grid.Resources>
+								<Style TargetType="Label" BasedOn="{StaticResource LabelFormStyle}"/>
+								<Style TargetType="TextBox" BasedOn="{StaticResource TextBoxFormStyle}"/>
+							</Grid.Resources>
+							
+							<Label Content="標題(最上面那條)"/>
+							<TextBox Text="{Binding Header}"/>
+
+							<Label Content="錯誤代碼" Grid.Row="1"/>
+							<TextBox Text="{Binding ErrorCode}" Grid.Row="1"/>
+
+							<Label Content="步驟標題(反正就是第三條)" Grid.Row="2"/>
+							<TextBox Text="{Binding StepsHeader}" Grid.Row="2" TextWrapping="Wrap"/>
+
+							<Label Content="解決步驟" Grid.Row="3"/>
+							<TextBox Text="{Binding Steps}" Grid.Row="3" TextWrapping="Wrap"/>
+
+							<Label Content="技術信息" Grid.Row="4"/>
+							<TextBox Text="{Binding TechnicalInfoHeader}" Grid.Row="4"/>
+
+							<Label Content="停止代碼" Grid.Row="5"/>
+							<TextBox Text="{Binding StopCode}" Grid.Row="5"/>
+
+                            <Label Content="轉儲開始" Grid.Row="6"/>
+							<TextBox Text="{Binding DumpStart}" Grid.Row="6"/>
+
+                            <Label Content="轉儲進度(@p)" Grid.Row="7"/>
+							<TextBox Text="{Binding DumpProgressEdit}" Grid.Row="7"/>
+
+                            <Label Content="轉儲完成" Grid.Row="8"/>
+							<TextBox Text="{Binding DumpComplete}" Grid.Row="8"/>
+						</Grid>
+					</ScrollViewer>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type viewModels:Windows9xBluescreenViewModel}">
+					<ScrollViewer>
+						<Grid MinHeight="{StaticResource MinGridHeight}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="10" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+							</Grid.RowDefinitions>
+							<Grid.Resources>
+								<Style TargetType="Label" BasedOn="{StaticResource LabelFormStyle}" />
+								<Style TargetType="TextBox" BasedOn="{StaticResource TextBoxFormStyle}" />
+							</Grid.Resources>
+
+							<Label Content="標題" />
+							<TextBox Text="{Binding Header}" />
+
+							<Label Grid.Row="1" Content="錯誤信息(第一條)" />
+							<TextBox Text="{Binding InfoLine1}" Grid.Row="1" />
+
+							<Label Grid.Row="2" Content="錯誤信息(第二條)" />
+							<TextBox Text="{Binding InfoLine2}" Grid.Row="2" />
+
+							<Label Grid.Row="3" Content="使用說明" />
+							<TextBox Text="{Binding Instructions}" Grid.Row="3" TextWrapping="Wrap" />
+
+							<Label Grid.Row="4" Content="錯誤代碼" />
+							<TextBox Text="{Binding Error}" Grid.Row="4" />
+
+							<Label Grid.Row="5" Content="最後一條
+                                   " />
+							<TextBox Grid.Row="5" Text="{Binding ToContinue}" />
+						</Grid>
+					</ScrollViewer>
+				</DataTemplate>
+			</TabControl.Resources>
+		</TabControl>
+
+		<Label Grid.Row="1" Content="背景色" />
+		<DockPanel Grid.Column="2" Grid.Row="1" LastChildFill="True"
+					Visibility="{Binding SelectedBluescreen.SupportsRainbow, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+			<CheckBox x:Name="RainbowCheckbox" Content="魔性彩虹" Padding="3,0,0,0" FontSize="11" VerticalAlignment="Center" IsChecked="{Binding SelectedBluescreen.RainbowMode, Mode=TwoWay}"/>
+			<controls:ColorPickerForm Color="{Binding SelectedBluescreen.BackgroundColor}" Margin="3"
+									  IsEnabled="{Binding IsChecked, ElementName=RainbowCheckbox, Converter={StaticResource NotConverter}}"/>
+		</DockPanel>
+
+		<Label Grid.Row="2" Content="文字顏色" />
+		<controls:ColorPickerForm Grid.Column="2" Grid.Row="2" Margin="3" Color="{Binding SelectedBluescreen.ForegroundColor}"/>
+		
+		<UniformGrid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" Columns="2" Rows="1">
+			<StackPanel Orientation="Horizontal">
+				<Label Content="開始延遲" />
+				<TextBox Text="{Binding SelectedBluescreen.Delay}" MinWidth="30" />
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label Content="開始跑進度條延遲" />
+				<TextBox Text="{Binding SelectedBluescreen.StartingProgress}" MinWidth="30" />
+				<TextBlock Text="%" VerticalAlignment="Center" />
+			</StackPanel>
+		</UniformGrid>
+
+		<Label Grid.Row="4" Content="跑完後執行指令" />
+		<TextBox Name="CmdCommand" Grid.Row="4" Grid.Column="2" Text="{Binding SelectedBluescreen.CmdCommand}" />
+        
+		<UniformGrid Grid.Row="5" Grid.ColumnSpan="3" Margin="0 0" VerticalAlignment="Center" Rows="1" Columns="4">
+			<Button Content="重設" Margin="10,3,5,3" Command="{Binding ResetAllCommand}" />
+            <Button Content="使用說明" Margin="5,3" Click="OpenAbout" />
+			<Button Content="創建EXE/Cmd檔(惡搞專用)" Margin="5,3" Click="GenerateExe" />
+			<Button Content="來吧" Margin="5,3,10,3" Click="ShowBSOD"
+					Visibility="{Binding SelectedBluescreen.IsNotWaiting, Converter={StaticResource VisibilityConverter}}" />
+			<Button Content="Cancel BSOD" Command="{Binding SelectedBluescreen.InterruptCommand}"
+                    Visibility="{Binding SelectedBluescreen.IsWaiting, Converter={StaticResource VisibilityConverter}}" />
+		</UniformGrid>
+	</Grid>
+</Window>
